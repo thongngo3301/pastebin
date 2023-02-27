@@ -36,5 +36,3 @@ pipeline {
     }
   }
 }
-
-def HOST = sh(returnStdout: true, script: 'echo ${BUILD_URL/http:\\/\\/} | cut -d "/" -f1').trim()
