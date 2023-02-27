@@ -1,5 +1,9 @@
 pipeline {
-  agent "devr"
+  agent {
+    node {
+      label 'devr'
+    }
+  }
 
   environment {
     DOCKER_REGISTRY = "https://registry.hub.docker.com"
