@@ -28,7 +28,7 @@ services:
           events {
             worker_connections 768;
           }
-            
+
           http {
             map $$sent_http_content_type $$expires {
                 default                    off;
@@ -38,23 +38,23 @@ services:
             }
 
             server {
-                listen       80; 
-                server_name  0.0.0.0; 
-                
+                listen       80;
+                server_name  0.0.0.0;
+
                 gzip on;
                 gzip_types text/plain application/xml text/css application/javascript;
-            
+
                 expires $$expires;
                 location / {
                     proxy_pass     http://pastebin:8081;
-                    
+
                 }
-            
+
                 access_log /dev/stdout;
             }
           }
       EON
       set -eux
       cat /etc/nginx/nginx.conf
-      nginx 
+      nginx
       EOF"
