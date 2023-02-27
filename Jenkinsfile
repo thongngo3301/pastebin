@@ -11,15 +11,21 @@ pipeline {
       steps {
         cleanWs()
         checkout scm
-        sh "docker build -t ${DOCKER_REPOSITORY}:${env.BUILD_NUMBER} ."
+        sh """
+          sudo su - deployer /bin/bash -c "docker build -t ${DOCKER_REPOSITORY}:${env.BUILD_NUMBER} ."
+        """
       }
     }
 
     stage('Push') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub-rw', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-          sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-          sh "docker push ${DOCKER_REPOSITORY}:${env.BUILD_NUMBER}"
+          sh """
+            sudo su - deployer /bin/bash -c "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+          """
+          sh """
+            sudo su - deployer /bin/bash -c "docker push ${DOCKER_REPOSITORY}:${env.BUILD_NUMBER}"
+          """
         }
       }
     }
@@ -29,8 +35,12 @@ pipeline {
         script {
           // Restart containers
           sh "echo URI=`curl https://ifconfig.me/ip` > .env"
-          sh "docker-compose down"
-          sh "docker-compose up -d"
+          sh """
+            sudo su - deployer /bin/bash -c "docker-compose down"
+          """
+          sh """
+            sudo su - deployer /bin/bash -c "docker-compose up -d"
+          """
         }
       }
     }
