@@ -19,30 +19,32 @@ pipeline {
         """
       }
     }
-
     stage('Push') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub-rw', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
           sh """
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-          """
-          sh """
             docker push ${DOCKER_REPOSITORY}:${env.BUILD_NUMBER}
           """
         }
       }
     }
-
     stage('Deploy') {
       steps {
         script {
-          // Restart containers
-          sh "echo URI=`curl https://ifconfig.me/ip` > .env"
           sh """
-            docker-compose down
+            docker-compose rm -f
+            docker-compose pull
+            docker-compose up --build -d
           """
+        }
+      }
+    }
+    stage('Test') {
+      steps {
+        script {
           sh """
-            docker-compose up -d
+            /home/deployer/venv/bin/python3 tests/main.py ec2-3-239-51-189.compute-1.amazonaws.com
           """
         }
       }
