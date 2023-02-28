@@ -17,4 +17,3 @@ FROM debian:buster-slim
 COPY --from=builder /usr/local/cargo/bin/pastebin /usr/local/bin/pastebin
 
 ENTRYPOINT ["pastebin"]
-CMD ["--help"]
