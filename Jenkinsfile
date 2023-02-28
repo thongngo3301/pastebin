@@ -13,7 +13,6 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        cleanWs()
         checkout scm
         sh """
           docker build -t ${DOCKER_REPOSITORY}:${env.BUILD_NUMBER} .
@@ -47,6 +46,11 @@ pipeline {
           """
         }
       }
+    }
+  }
+  post {
+    always {
+      cleanWs()
     }
   }
 }
