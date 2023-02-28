@@ -4,7 +4,12 @@ RUN apt-get update && apt-get install -y apt-utils software-properties-common ls
 RUN bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
 
 WORKDIR /usr/src/pastebin
-COPY . .
+
+# Only copy necessary folder
+COPY ./Cargo.toml ./Cargo.toml
+COPY ./api.fbs ./api.fbs
+COPY ./static ./static
+COPY ./src ./src
 
 RUN cargo install --path .
 
