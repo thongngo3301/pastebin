@@ -5,7 +5,7 @@ services:
     image: thongngo3301/pastebin:latest
     container_name: pastebin
     volumes:
-      - $DOCKERDIR/pastebin:/var/lib/pastebin
+      - /home/deployer/pastebin:/var/lib/pastebin
     restart: unless-stopped
     command: --address 0.0.0.0 --port 8081 --uri ${URI} --db=/var/lib/pastebin/
     ports:
