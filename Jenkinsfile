@@ -12,6 +12,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
+        cleanWs()
         checkout scm
         sh """
           docker build -t ${DOCKER_REPOSITORY}:latest .
@@ -47,11 +48,6 @@ pipeline {
           """
         }
       }
-    }
-  }
-  post {
-    always {
-      cleanWs()
     }
   }
 }
