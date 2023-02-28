@@ -34,7 +34,7 @@ pipeline {
           sh """
             docker-compose rm -f
             docker-compose pull
-            docker-compose up --build --force-recreate -d
+            URI="http://localhost" docker-compose up --build --force-recreate -d
           """
         }
       }
