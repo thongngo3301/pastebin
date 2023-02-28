@@ -6,7 +6,6 @@ pipeline {
   }
 
   environment {
-    DOCKER_REGISTRY = "https://registry.hub.docker.com"
     DOCKER_REPOSITORY = "thongngo3301/pastebin"
   }
 
@@ -15,7 +14,7 @@ pipeline {
       steps {
         checkout scm
         sh """
-          docker build -t ${DOCKER_REPOSITORY}:${env.BUILD_NUMBER} .
+          docker build -t ${DOCKER_REPOSITORY}:latest .
         """
       }
     }
@@ -24,7 +23,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'dockerhub-rw', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
           sh """
             docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
-            docker push ${DOCKER_REPOSITORY}:${env.BUILD_NUMBER}
+            docker push ${DOCKER_REPOSITORY}:latest
           """
         }
       }
@@ -44,7 +43,7 @@ pipeline {
       steps {
         script {
           sh """
-            /home/deployer/venv/bin/python3 tests/main.py ec2-3-239-51-189.compute-1.amazonaws.com
+            /home/deployer/venv/bin/python3 tests/main.py http://ec2-3-239-51-189.compute-1.amazonaws.com
           """
         }
       }

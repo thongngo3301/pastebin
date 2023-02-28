@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   pastebin:
-    image: mkaczanowski/pastebin:latest
+    image: thongngo3301/pastebin:latest
     container_name: pastebin
     volumes:
       - $DOCKERDIR/pastebin:/var/lib/pastebin
